@@ -75,8 +75,13 @@ speed :				time each slide is shown [integer, milliseconds, defaults to 3000]
 			// add first slide to wrapper
 			$(gallery[0]).clone().appendTo($cont);
 			
+			
 			// preload slide images into memory
 			preloadImg();
+			
+			if(config.controls || config.links){
+				addControlBanner();
+			}
 			
 			// add controls
 			if(config.controls){
@@ -212,10 +217,14 @@ speed :				time each slide is shown [integer, milliseconds, defaults to 3000]
 					});
 				});
 			};
+			
+			function addControlBanner(){
+				$wrap.append('<p class="jshowoff-controls '+uniqueClass+'-controls"></p>');
+			};
 				
 			// generate and add play/pause, prev, next controls
 			function addControls() {
-				$wrap.append('<p class="jshowoff-controls '+uniqueClass+'-controls"><a class="jshowoff-play '+uniqueClass+'-play" href="#null">'+config.controlText.pause+'</a> <a class="jshowoff-prev '+uniqueClass+'-prev" href="#null">'+config.controlText.previous+'</a> <a class="jshowoff-next '+uniqueClass+'-next" href="#null">'+config.controlText.next+'</a></p>');
+				$(".jshowoff-controls").prepend('<a class="jshowoff-play '+uniqueClass+'-play" href="#null">'+config.controlText.pause+'</a> <a class="jshowoff-prev '+uniqueClass+'-prev" href="#null">'+config.controlText.previous+'</a> <a class="jshowoff-next '+uniqueClass+'-next" href="#null">'+config.controlText.next+'</a>');
 				$('.'+uniqueClass+'-controls a').each(function(){
 						if($(this).hasClass('jshowoff-play')) $(this).click(function(){ isPlaying() ? pause('playBtn') : play(); return false; } );
 						if($(this).hasClass('jshowoff-prev')) $(this).click(function(){ previous(); return false; });
@@ -226,7 +235,7 @@ speed :				time each slide is shown [integer, milliseconds, defaults to 3000]
 
 			// generate and add slide links
 			function addSlideLinks() {
-				$wrap.append('<p class="jshowoff-slidelinks '+uniqueClass+'-slidelinks"></p>');
+				$(".jshowoff-controls").append('<p class="jshowoff-slidelinks '+uniqueClass+'-slidelinks"></p>');
 				$.each(gallery, function(i, val) {
 					var linktext = $(this).attr('title') != '' ? $(this).attr('title') : i+1;
 					$('<a class="jshowoff-slidelink-'+i+' '+uniqueClass+'-slidelink-'+i+'" href="#null">'+linktext+'</a>').bind('click', {index:i}, function(e){ goToAndPause(e.data.index); return false; }).appendTo('.'+uniqueClass+'-slidelinks');
