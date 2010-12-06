@@ -8,6 +8,7 @@ License: 	Dual licensed under the MIT and GPL licenses.
 
 jShowOff Options
 
+altText :			whether to show the alt text for an image in the control bar (if the contents of slide is an image)
 animatePause :		whether to use 'Pause' animation text when pausing [boolean, defaults to true]
 autoPlay :			whether to start playing immediately [boolean, defaults to true]
 changeSpeed :		speed of transition [integer, milliseconds, defaults to 600]
@@ -28,6 +29,7 @@ speed :				time each slide is shown [integer, milliseconds, defaults to 3000]
 
 		// default global vars
 		var config = {
+			altText : false,
 			animatePause : true,
 			autoPlay : true,
 			changeSpeed : 600,
@@ -79,8 +81,12 @@ speed :				time each slide is shown [integer, milliseconds, defaults to 3000]
 			// preload slide images into memory
 			preloadImg();
 			
-			if(config.controls || config.links){
+			if(config.controls || config.links || config.altText){
 				addControlBanner();
+			}
+			
+			if(config.altText) {
+				$(".slidealt").text($("img", gallery[0]).attr("alt"));
 			}
 			
 			// add controls
@@ -148,6 +154,10 @@ speed :				time each slide is shown [integer, milliseconds, defaults to 3000]
 						$cont.children().eq(0).css('position','absolute').remove();
 					};
 				};
+				
+				if(config.altText) {
+					$(".slidealt").text($("img", gallery[counter]).attr("alt"));
+				}
 				
 				// update active class on slide link
 				if(config.links){
@@ -219,7 +229,7 @@ speed :				time each slide is shown [integer, milliseconds, defaults to 3000]
 			};
 			
 			function addControlBanner(){
-				$wrap.append('<p class="jshowoff-controls '+uniqueClass+'-controls"></p>');
+				$wrap.append('<p class="jshowoff-controls '+uniqueClass+'-controls"><span class="slidealt"></span></p>');
 			};
 				
 			// generate and add play/pause, prev, next controls
